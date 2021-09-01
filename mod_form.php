@@ -55,7 +55,7 @@ defined('MOODLE_INTERNAL') || die;
 			$this->add_action_buttons(true, false, null);
 
             $PAGE->requires->js(new moodle_url(get_config('local_clickview', 'eventsapi')));
-            $PAGE->requires->js('/mod/clickview/selector/js/dialog.js');
+            $PAGE->requires->js_call_amd('mod_clickview/selector','init');
 		}
 
 	}
