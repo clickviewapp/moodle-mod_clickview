@@ -1,13 +1,32 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-	require_once('../../config.php');
+/**
+ * Prints an instance of mod_clickview.
+ *
+ * @package     mod_clickview
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-	require_once('./cv-config.php');
+require(__DIR__ . '/../../config.php');
 
 	$id = required_param('id', PARAM_INT);    // Course Module ID
 
-	global $CFG;
-	global $CFG_CLICKVIEW;
+global $CFG;
 
 	if (!$cm = get_coursemodule_from_id('clickview', $id)) {
 		print_error('Course Module ID was incorrect');
@@ -35,7 +54,17 @@
 	if(isset($cv_vid->embedhtml) && $cv_vid->embedhtml != '0'){
 			$embed_box = '<div id="cv-player" data-test="true">'.$cv_vid->embedhtml.'</div>';
 	} else {
-			$embed_box = '<div id="cv-player" data-test="false"><iframe frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen src="'.$CFG_CLICKVIEW->onlineHost.'/Share/PlayEmbed?shareCode='.$cv_vid->shortcode.'&a='.$autoplay.'&consumerKey='.$CFG_CLICKVIEW->consumerKey.'" width="'.$cv_vid->width.'" height="'.$cv_vid->height.'" ></iframe></div>';
+        $config = get_config('local_clickview');
+
+        $params = [
+                'consumerKey' => $config->consumerkey,
+                'shareCode' => $cv_vid->shortcode,
+                'a' => $autoplay,
+        ];
+
+        $url = new moodle_url($config->hostlocation . $config->shareplayembedurl, $params);
+
+        $embed_box = '<div id="cv-player" data-test="false"><iframe frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen src="'. $url . '" width="'.$cv_vid->width.'" height="'.$cv_vid->height.'" ></iframe></div>';
 	}
 
 	echo $OUTPUT->box($embed_box);

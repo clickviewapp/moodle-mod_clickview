@@ -1,6 +1,28 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-	defined('MOODLE_INTERNAL') || die;
+/**
+ * The main mod_clickview configuration form.
+ *
+ * @package     mod_clickview
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die;
 
 	require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
@@ -12,15 +34,12 @@
 		}
 
 		function definition() {
-			global $CFG;
+			global $CFG, $PAGE;
 		
 			// Add the ClickView Selector to the registered types in the Moodle Quick Form wrapper.
 			MoodleQuickForm::registerElementType('clickview_selector', $CFG->dirroot."/mod/clickview/selector/clickview_selector.php", 'MoodleQuickForm_clickview_selector');
 
 			$mform = $this->_form;
-			
-			$mform->addElement('html', '<script type="text/javascript" src="//static.clickview.com.au/cv-events-api/1.0.0/cv-events-api.min.js"></script>');
-			$mform->addElement('html', '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/clickview/selector/js/dialog.js'.'" defer></script>');
 
 			$mform->addElement('header', 'generalhdr', 'General');
 			$mform->addElement('text', 'name', get_string('editor:title', 'clickview'), array('size' => 55));
@@ -34,6 +53,9 @@
 			$this->standard_coursemodule_elements();
 
 			$this->add_action_buttons(true, false, null);
+
+            $PAGE->requires->js(new moodle_url(get_config('local_clickview', 'eventsapi')));
+            $PAGE->requires->js('/mod/clickview/selector/js/dialog.js');
 		}
 
 	}

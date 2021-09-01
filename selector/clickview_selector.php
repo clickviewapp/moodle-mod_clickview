@@ -1,9 +1,39 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-global $CFG;
+/**
+ * ClickView video selector form element.
+ *
+ * @package     mod_clickview
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->libdir.'/pear/HTML/QuickForm/element.php');
+defined('MOODLE_INTERNAL') || die;
 
+require_once('HTML/QuickForm/element.php');
+
+/**
+ * HTML class for a ClickView video selector tool.
+ *
+ * @package     mod_clickview
+ * @category    form
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class MoodleQuickForm_clickview_selector extends HTML_QuickForm_element {
 
 	private $_name;
@@ -39,16 +69,20 @@ class MoodleQuickForm_clickview_selector extends HTML_QuickForm_element {
 	}
 
 	function toHtml() {
-		require_once(dirname(dirname(__FILE__)).'/cv-config.php');
-		require_once(dirname(dirname(__FILE__)).'/schoolId.php');
-		
-		$elname = $this->getName();
+        $config = get_config('local_clickview');
 
-		$param = '';
+        $params = [
+                'consumerKey' => $config->consumerkey,
+                'singleSelectMode' => 'true'
+        ];
 
-		if(! empty($SCHOOL_ID)) {
-			$param = '&schoolId=' . $SCHOOL_ID->value;
-		}
+        if (!empty($schoolid = $config->schoolid)) {
+            $params['schoolId'] = $schoolid;
+        }
+
+        $url = new moodle_url($config->hostlocation . $config->iframeurl, $params);
+
+        $elname = $this->getName();
 		
 		$str = 	'<div style="max-height: 494px; overflow: hidden;">'.
 			'<div '.
@@ -58,7 +92,7 @@ class MoodleQuickForm_clickview_selector extends HTML_QuickForm_element {
 			' padding-bottom: 61.8%;'.
 			' min-width: 500px;'.
 			' max-width: 800px;">'.
-					'<iframe id="cv-plugin-frame" frameborder="0" src="'.$CFG_CLICKVIEW->pluginFrameUrl.'&singleSelectMode=true'.$param.'"'.
+						'<iframe id="cv-plugin-frame" frameborder="0" src="' . $url . '"' .
 						' style="position: absolute;'.
 						' left: 0px;'.
 						' top: 0px;'.
