@@ -27,6 +27,8 @@ namespace mod_clickview;
 use HTML_QuickForm_element;
 use moodle_url;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once('HTML/QuickForm/element.php');
 
 /**
@@ -39,8 +41,10 @@ require_once('HTML/QuickForm/element.php');
  */
 class selector extends HTML_QuickForm_element {
 
-    /** @var array Default values of the video */
-    var $_values = [
+    /**
+     * @var array Default values of the video
+     */
+    private $_values = [
             'width' => null,
             'height' => null,
             'autoplay' => null,
@@ -55,7 +59,9 @@ class selector extends HTML_QuickForm_element {
      *
      * @param string $name The input field name attribute
      */
-    function setName($name) {
+    // phpcs:disable
+    public function setName($name) {
+    // phpcs:enable
         $this->updateAttributes(['name' => $name]);
     }
 
@@ -64,7 +70,9 @@ class selector extends HTML_QuickForm_element {
      *
      * @return string
      */
-    function getName() {
+    // phpcs:disable
+    public function getName() {
+    // phpcs:enable
         return $this->getAttribute('name');
     }
 
@@ -73,7 +81,9 @@ class selector extends HTML_QuickForm_element {
      *
      * @param mixed $value Array or comma delimited string of selected values
      */
-    function setValue($value) {
+    // phpcs:disable
+    public function setValue($value) {
+    // phpcs:enable
         if (is_array($value)) {
             $this->_values = array_values($value);
         } else {
@@ -86,7 +96,9 @@ class selector extends HTML_QuickForm_element {
      *
      * @return array
      */
-    function getValue() {
+    // phpcs:disable
+    public function getValue() {
+    // phpcs:enable
         return $this->_values;
     }
 
@@ -95,7 +107,9 @@ class selector extends HTML_QuickForm_element {
      *
      * @return string
      */
-    function toHtml() {
+    // phpcs:disable
+    public function toHtml() {
+    // phpcs:enable
         $config = get_config('local_clickview');
 
         $params = [

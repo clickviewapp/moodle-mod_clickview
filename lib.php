@@ -1,107 +1,200 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-	defined('MOODLE_INTERNAL') || die();
-	
-	
-	function log_embed($params)
-	{
-		$data = new stdClass();
-		$data->e = $params->eventname;
-		$data->d = $params->logging;
-		
-		foreach ($data as $key => &$val) {
-		if (is_array($val)) $val = implode(',', $val);
-			$post_params[] = $key.'='.urlencode($val);
-		}
-		$post_string = implode('&', $post_params);
-	
-		$parts=parse_url($params->onlineurl);
-		
-		$fp = fsockopen($parts['host'],
-			isset($parts['port'])?$parts['port']:80,
-			$errno, $errstr, 30);
-	
-		$out = "GET ".$parts['path']." HTTP/1.1\r\n";
-		$out.= "Host: ".$parts['host']."\r\n";
-		$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out.= "Content-Length: ".strlen($post_string)."\r\n";
-		$out.= "Connection: Close\r\n\r\n";
-		if (isset($post_string)) $out.= $post_string;
-	
-		fwrite($fp, $out);
-		fclose($fp);
-	}
+/**
+ *  Library of interface functions and constants.
+ *
+ * @package     mod_clickview
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-	function clickview_add_instance($clickview)
-	{
-		global $DB;
+defined('MOODLE_INTERNAL') || die();
 
-		$clickview->width = $clickview->clickview['width'];
-		$clickview->height = $clickview->clickview['height'];
-		$clickview->autoplay = $clickview->clickview['autoplay'];
-		$clickview->embedlink = $clickview->clickview['embedlink'];
-		$clickview->embedhtml = $clickview->clickview['embedhtml'];
-		$clickview->thumbnailurl = $clickview->clickview['thumbnailurl'];
-		$clickview->title = $clickview->clickview['title'];
-		$clickview->logging = $clickview->clickview['logging'];
-		$clickview->onlineurl = $clickview->clickview['onlineurl'];
-		$clickview->eventname = $clickview->clickview['eventname'];
-		
-		$clickview->timemodified = time();
-		
-		$result = $DB->insert_record('clickview', $clickview);
-		
-		try
-		{
-			log_embed($clickview);
-		}
-		catch(Exception $e)
-		{
-		}
-		
-		return $result;
-	}
+/**
+ * Saves a new instance of the mod_clickview into the database.
+ *
+ * Given an object containing all the necessary data, (defined by the form
+ * in mod_form.php) this function will create a new instance and return the id
+ * number of the instance.
+ *
+ * @param stdClass $data An object from the form.
+ * @param mod_clickview_mod_form|null $mform The form.
+ * @return int The id of the newly inserted record.
+ * @throws dml_exception
+ * @throws moodle_exception
+ */
+function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = null): int {
+    global $DB;
 
-	function clickview_update_instance($clickview)
-	{
-		global $DB;
-		
-		$clickview->width = $clickview->clickview['width'];
-		$clickview->height = $clickview->clickview['height'];
-		$clickview->autoplay = $clickview->clickview['autoplay'];
-		$clickview->embedlink = $clickview->clickview['embedlink'];
-		$clickview->embedhtml = $clickview->clickview['embedhtml'];
-		$clickview->thumbnailurl = $clickview->clickview['thumbnailurl'];
-		$clickview->title = $clickview->clickview['title'];
-		
-		$clickview->timemodified = time();
-		
-		$clickview->id = $clickview->instance;
+    $data->timecreated = time();
+    $data->timemodified = $data->timecreated;
+    $cmid = $data->coursemodule;
 
-		return $DB->update_record('clickview', $clickview);
-	}
+    $data = clickview_parse_clickview_selector_data($data);
 
-	function clickview_delete_instance($id)
-	{
-		global $DB;
+    $data->id = $DB->insert_record('clickview', $data);
 
-		if (! $clickview = $DB->get_record("clickview", array("id"=>$id))) {
-			return false;
-		}
+    // TODO: Ask if we can delete that or enable it with a debugging setting?
+    try {
+        clickview_log($data);
+    } catch (Exception $e) {
+        throw new moodle_exception('invaliddata', 'error');
+    }
 
-		$result = true;
+    return $data->id;
+}
 
-		if (! $DB->delete_records("clickview", array("id"=>$clickview->id))) {
-			$result = false;
-		}
+/**
+ * Updates an instance of the mod_clickview in the database.
+ *
+ * Given an object containing all the necessary data (defined in mod_form.php),
+ * this function will update an existing instance with new data.
+ *
+ * @param stdClass $data An object from the form in mod_form.php.
+ * @param mod_clickview_mod_form|null $mform The form.
+ * @return bool True if successful, false otherwise.
+ * @throws dml_exception
+ */
+function clickview_update_instance(stdClass $data, mod_clickview_mod_form $mform = null): bool {
+    global $DB;
 
-		return $result;
-	}
+    $data->timemodified = time();
+    $data->id = $data->instance;
 
-	function clickview_supports($feature) {
-		switch($feature) {
-			case FEATURE_MOD_ARCHETYPE: return MOD_ARCHETYPE_RESOURCE;
-			case FEATURE_MOD_INTRO: return false;
-			default: return null;
-		}
-	}
+    $data = clickview_parse_clickview_selector_data($data);
+
+    return $DB->update_record('clickview', $data);
+}
+
+/**
+ * Removes an instance of the mod_clickview from the database.
+ *
+ * @param int $id Id of the module instance.
+ * @return bool True if successful, false on failure.
+ */
+function clickview_delete_instance(int $id): bool {
+    global $DB;
+
+    $activity = $DB->get_record('clickview', ['id' => $id]);
+    if (!$activity) {
+        return false;
+    }
+
+    $DB->delete_records('clickview', ['id' => $id]);
+
+    return true;
+}
+
+/**
+ * Checks if clickview activity supports a specific feature.
+ *
+ * @uses FEATURE_MOD_ARCHETYPE
+ * @uses FEATURE_GROUPS
+ * @uses FEATURE_GROUPINGS
+ * @uses FEATURE_MOD_INTRO
+ * @uses FEATURE_SHOW_DESCRIPTION
+ * @uses FEATURE_COMPLETION_TRACKS_VIEWS
+ * @uses FEATURE_COMPLETION_HAS_RULES
+ * @uses FEATURE_MODEDIT_DEFAULT_COMPLETION
+ * @uses FEATURE_GRADE_HAS_GRADE
+ * @uses FEATURE_GRADE_OUTCOMES
+ * @uses FEATURE_BACKUP_MOODLE2
+ * @param string $feature FEATURE_xx constant for requested feature
+ * @return mixed True if module supports feature, false if not, null if doesn't know
+ */
+function clickview_supports($feature) {
+    switch ($feature) {
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_GROUPS:
+            return true;
+        case FEATURE_GROUPINGS:
+            return true;
+        case FEATURE_MOD_INTRO:
+            return false;
+        case FEATURE_SHOW_DESCRIPTION:
+            return false;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_MODEDIT_DEFAULT_COMPLETION:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
+        case FEATURE_GRADE_OUTCOMES:
+            return false;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        default:
+            return null;
+    }
+}
+
+/**
+ * Transform mform data to parse out the clickview video fields.
+ *
+ * @param stdClass $data The mform data.
+ * @return stdClass
+ */
+function clickview_parse_clickview_selector_data(stdClass $data): stdClass {
+    foreach ($data->clickview as $key => $value) {
+        $data->$key = $value;
+    }
+
+    unset($data->clickview);
+
+    return $data;
+}
+
+/**
+ * Add new instance log.
+ *
+ * @param $params
+ */
+function clickview_log($params) {
+    $data = new stdClass();
+    $data->e = $params->eventname;
+    $data->d = $params->logging;
+
+    foreach ($data as $key => &$val) {
+        if (is_array($val)) {
+            $val = implode(',', $val);
+        }
+
+        $postparams[] = $key . '=' . urlencode($val);
+    }
+
+    $poststring = implode('&', $postparams);
+
+    $parts = parse_url($params->onlineurl);
+
+    $fp = fsockopen($parts['host'],
+            $parts['port'] ?? 80,
+            $errno, $errstr, 30);
+
+    $out = "GET " . $parts['path'] . " HTTP/1.1\r\n";
+    $out .= "Host: " . $parts['host'] . "\r\n";
+    $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+    $out .= "Content-Length: " . strlen($poststring) . "\r\n";
+    $out .= "Connection: Close\r\n\r\n";
+
+    if (isset($poststring)) {
+        $out .= $poststring;
+    }
+
+    fwrite($fp, $out);
+    fclose($fp);
+}
