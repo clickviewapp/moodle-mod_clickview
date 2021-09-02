@@ -1,26 +1,40 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-//Clickview Selector form
-$string['editor:title'] = 'Display Title';
-$string['editor:selector'] = 'Select Video';
-$string['editor:required'] = 'Required';
-$string['editor:selectorerror'] = 'Please select a video';
+/**
+ * Plugin strings are defined here.
+ *
+ * @package     mod_clickview
+ * @category    string
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-//Clickview Selector Frame
-$string['selector:title'] = "Insert a ClickView video";
-
-//Moodle Internals
+$string['pluginname'] = 'ClickView Video';
 $string['modulename'] = 'ClickView Video';
-$string['modulename_help'] = 'The ClickView Video module allows you to search for and embed any ClickView video into your course page.
+$string['modulename_help'] = 'The ClickView activity allows you to search for and embed any ClickView video into your course page.
 
-The ClickView Video module enables you to:
+A ClickView activity may be used
 
-* Embed a video from your School Library
-* Embed a video from The ClickView Exchange
-* Embed a video from your ClickView Workspace
-* Search Albert
-* Upload a video';
+* To embed a video from your school library
+* To embed a video from the ClickView exchange
+* To embed a video from your ClickView workspace
+* To search for Albert
+* To upload a video';
 $string['modulename_link'] = 'mod/clickview/view';
 $string['modulenameplural'] = 'ClickView Videos';
-$string['pluginadministration'] = 'ClickView Administration';
-$string['pluginname'] = 'Clickview Video';
+$string['pluginadministration'] = 'ClickView administration';
+$string['choosevideo'] = 'Choose a video';
