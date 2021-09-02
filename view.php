@@ -24,49 +24,36 @@
 
 require(__DIR__ . '/../../config.php');
 
-	$id = required_param('id', PARAM_INT);    // Course Module ID
+$id = required_param('id', PARAM_INT);
 
-global $CFG;
+list ($course, $cm) = get_course_and_cm_from_cmid($id, 'clickview');
 
-	if (!$cm = get_coursemodule_from_id('clickview', $id)) {
-		print_error('Course Module ID was incorrect');
-	}
-	if (!$course = $DB->get_record('course', array('id'=> $cm->course))) {
-		print_error('Course is misconfigured');
-	}
-	if (!$cv_vid = $DB->get_record('clickview', array('id'=> $cm->instance))) {
-		print_error('Course module is incorrect');
-	}
-	require_login($course, true, $cm);
+require_login($course, true, $cm);
 
-	$PAGE->set_url('/mod/clickview/view.php', array('id' => $cm->id));
+$video = $DB->get_record('clickview', ['id' => $cm->instance]);
 
-	$PAGE->set_title($cv_vid->name);
-	$PAGE->set_heading(format_string($course->fullname));
+$PAGE->set_url('/mod/clickview/view.php', ['id' => $cm->id]);
 
-	echo $OUTPUT->header();
+$shortname = format_string($course->shortname);
+$pagetitle = strip_tags($shortname . ': ' . format_string($video->name));
+$PAGE->set_title(format_string($pagetitle));
 
-	if(!(is_numeric($cv_vid->width) || is_numeric($cv_vid->height))) {
-		print_error("This ClickView Resource has invalid fields in the moodle database.");
-	}
+$PAGE->set_heading(format_string($course->fullname));
 
-	$autoplay = $cv_vid->autoplay === '1' ? 'true' : 'false';
-	if(isset($cv_vid->embedhtml) && $cv_vid->embedhtml != '0'){
-			$embed_box = '<div id="cv-player" data-test="true">'.$cv_vid->embedhtml.'</div>';
-	} else {
-        $config = get_config('local_clickview');
+echo $OUTPUT->header();
+echo $OUTPUT->heading(format_string($video->name));
 
-        $params = [
-                'consumerKey' => $config->consumerkey,
-                'shareCode' => $cv_vid->shortcode,
-                'a' => $autoplay,
-        ];
+$output = $video->embedhtml ?? '';
 
-        $url = new moodle_url($config->hostlocation . $config->shareplayembedurl, $params);
+if (empty($output)) {
+    $url = new moodle_url($video->embedlink);
 
-        $embed_box = '<div id="cv-player" data-test="false"><iframe frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen src="'. $url . '" width="'.$cv_vid->width.'" height="'.$cv_vid->height.'" ></iframe></div>';
-	}
+    $iframe =
+            '<iframe class="embed-responsive-item" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen src="' .
+            $url . '" width="' . $video->width . '" height="' . $video->height . '" allow="autoplay"></iframe>';
+    $output = html_writer::div($iframe, 'embed-responsive embed-responsive-16by9');
+}
 
-	echo $OUTPUT->box($embed_box);
+echo $OUTPUT->box($output);
 
-	echo $OUTPUT->footer($course);
+echo $OUTPUT->footer();
