@@ -42,20 +42,10 @@ function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = 
 
     $data->timecreated = time();
     $data->timemodified = $data->timecreated;
-    $cmid = $data->coursemodule;
 
     $data = clickview_parse_clickview_selector_data($data);
 
-    $data->id = $DB->insert_record('clickview', $data);
-
-    // TODO: Ask if we can delete that or enable it with a debugging setting?
-    try {
-        clickview_log($data);
-    } catch (Exception $e) {
-        throw new moodle_exception('invaliddata', 'error');
-    }
-
-    return $data->id;
+    return $DB->insert_record('clickview', $data);
 }
 
 /**
@@ -157,44 +147,4 @@ function clickview_parse_clickview_selector_data(stdClass $data): stdClass {
     unset($data->clickview);
 
     return $data;
-}
-
-/**
- * Add new instance log.
- *
- * @param $params
- */
-function clickview_log($params) {
-    $data = new stdClass();
-    $data->e = $params->eventname;
-    $data->d = $params->logging;
-
-    foreach ($data as $key => &$val) {
-        if (is_array($val)) {
-            $val = implode(',', $val);
-        }
-
-        $postparams[] = $key . '=' . urlencode($val);
-    }
-
-    $poststring = implode('&', $postparams);
-
-    $parts = parse_url($params->onlineurl);
-
-    $fp = fsockopen($parts['host'],
-            $parts['port'] ?? 80,
-            $errno, $errstr, 30);
-
-    $out = "GET " . $parts['path'] . " HTTP/1.1\r\n";
-    $out .= "Host: " . $parts['host'] . "\r\n";
-    $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-    $out .= "Content-Length: " . strlen($poststring) . "\r\n";
-    $out .= "Connection: Close\r\n\r\n";
-
-    if (isset($poststring)) {
-        $out .= $poststring;
-    }
-
-    fwrite($fp, $out);
-    fclose($fp);
 }
