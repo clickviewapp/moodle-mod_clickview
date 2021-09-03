@@ -90,5 +90,20 @@ function xmldb_clickview_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2016052001, 'clickview');
     }
 
+    if ($oldversion < 2021083001) {
+
+        // Define field shortcode to be dropped from clickview.
+        $table = new xmldb_table('clickview');
+        $field = new xmldb_field('shortcode');
+
+        // Conditionally launch drop field shortcode.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Clickview savepoint reached.
+        upgrade_mod_savepoint(true, 2021083001, 'clickview');
+    }
+
     return true;
 }
