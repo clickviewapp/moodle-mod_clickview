@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021083000;
+$plugin->version = 2021083001;
 $plugin->requires = 2018051700;
 $plugin->component = 'mod_clickview';
 $plugin->dependencies = [
