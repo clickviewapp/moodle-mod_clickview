@@ -35,13 +35,13 @@ define([], function() {
             }
 
             eventsApi.on('cv-lms-addvideo', function (event, detail) {
-                document.getElementById('cv-width').value = detail.embed.width;
-                document.getElementById('cv-height').value = detail.embed.height;
-                document.getElementById('cv-autoplay').value = (detail.embed.autoplay ? '1' : '0');
-                document.getElementById('cv-embedhtml').value = detail.embedHtml;
-                document.getElementById('cv-embedlink').value = detail.embedLink;
-                document.getElementById('cv-thumbnailurl').value = detail.thumbnailUrl;
-                document.getElementById('cv-title').value = detail.title;
+                document.getElementsByName('cv-name')[0].value = detail.title;
+                document.getElementsByName('cv-width')[0].value = detail.embed.width;
+                document.getElementsByName('cv-height')[0].value = detail.embed.height;
+                document.getElementsByName('cv-autoplay')[0].value = (detail.embed.autoplay ? '1' : '0');
+                document.getElementsByName('cv-embedhtml')[0].value = detail.embedHtml;
+                document.getElementsByName('cv-embedlink')[0].value = detail.embedLink;
+                document.getElementsByName('cv-thumbnailurl')[0].value = detail.thumbnailUrl;
 
                 if (displayTitle && !userSetTitle) {
                     displayTitle.value = detail.title;
@@ -49,9 +49,9 @@ define([], function() {
             }, true);
 
             eventsApi.on('cv-delegate-logging', function (event, data) {
-                document.getElementById('cv-logging').value = data.JSON;
-                document.getElementById('cv-logging-onlineurl').value = data.onlineUrl;
-                document.getElementById('cv-logging-eventname').value = data.eventName;
+                document.getElementsByName('cv-logging')[0].value = data.JSON;
+                document.getElementsByName('cv-logging-onlineurl')[0].value = data.onlineUrl;
+                document.getElementsByName('cv-logging-eventname')[0].value = data.eventName;
             }, true);
         }
     };

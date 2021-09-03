@@ -30,6 +30,8 @@ class mod_clickview_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements.
+     *
+     * @throws moodle_exception
      */
     public function definition() {
         global $CFG, $PAGE;
@@ -52,8 +54,29 @@ class mod_clickview_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
+        $mform->addElement('hidden', 'cv-name');
+        $mform->setType('cv-name', PARAM_TEXT);
+        $mform->addElement('hidden', 'cv-width');
+        $mform->setType('cv-width', PARAM_INT);
+        $mform->addElement('hidden', 'cv-height');
+        $mform->setType('cv-height', PARAM_INT);
+        $mform->addElement('hidden', 'cv-autoplay');
+        $mform->setType('cv-autoplay', PARAM_INT);
+        $mform->addElement('hidden', 'cv-embedhtml');
+        $mform->setType('cv-embedhtml', PARAM_RAW);
+        $mform->addElement('hidden', 'cv-embedlink');
+        $mform->setType('cv-embedlink', PARAM_RAW);
+        $mform->addElement('hidden', 'cv-thumbnailurl');
+        $mform->setType('cv-thumbnailurl', PARAM_RAW);
+
+        $mform->addElement('hidden', 'cv-logging');
+        $mform->setType('cv-logging', PARAM_RAW);
+        $mform->addElement('hidden', 'cv-logging-onlineurl');
+        $mform->setType('cv-logging-onlineurl', PARAM_RAW);
+        $mform->addElement('hidden', 'cv-logging-eventname');
+        $mform->setType('cv-logging-eventname', PARAM_ALPHANUMEXT);
+
         $mform->addElement('clickview_selector', 'clickview', get_string('choosevideo', 'clickview'));
-        $mform->addRule('clickview', null, 'required');
 
         $this->standard_grading_coursemodule_elements();
 
@@ -71,16 +94,49 @@ class mod_clickview_mod_form extends moodleform_mod {
      * @param array $data array of ("fieldname"=>value) of submitted data
      * @param array $files array of uploaded files "element_name"=>tmp_file_path
      * @return array
-     **/
-    public function validation($data, $files) {
+     *
+     * @throws coding_exception
+     */
+    public function validation($data, $files): array {
         $errors = parent::validation($data, $files);
 
-        foreach ($data['clickview'] as $key => $value) {
-            if (!isset($value)) {
-                $errors['clickview'] = get_string('required');
+        foreach ($data as $key => $value) {
+            $expkey = explode('-', $key);
+
+            if ($expkey[0] === 'cv') {
+                if (!isset($value)) {
+                    $errors['clickview'] = get_string('required');
+                }
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * Allows module to modify the data returned by form get_data().
+     * This method is also called in the bulk activity completion form.
+     *
+     * Only available on moodleform_mod.
+     *
+     * @param stdClass $data the form data to be modified.
+     */
+    public function data_postprocessing($data): stdClass {
+        parent::data_postprocessing($data);
+
+        foreach ($data as $key => $value) {
+            $expkey = explode('-', $key);
+
+            if ($expkey[0] === 'cv') {
+                $newkey = (string)$expkey[1];
+                $data->$newkey = $value;
+
+                unset($data->$key);
+            }
+        }
+
+        unset($data->clickview);
+
+        return $data;
     }
 }

@@ -123,9 +123,7 @@ class selector extends HTML_QuickForm_element {
 
         $url = new moodle_url($config->hostlocation . $config->iframeurl, $params);
 
-        $elname = $this->getName();
-
-        $str = '<div style="max-height: 494px; overflow: hidden;">' .
+        return '<div style="max-height: 494px; overflow: hidden;">' .
                 '<div ' .
                 'style="position: relative;' .
                 ' width: 100%;' .
@@ -142,18 +140,6 @@ class selector extends HTML_QuickForm_element {
                 ' max-height: 494px;' .
                 ' min-width: 500px;' .
                 ' max-width: 800px;"></iframe>' .
-                '</div></div>' .
-                '<input name="' . $elname . '[width]"        id="cv-width" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[height]"       id="cv-height" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[embedhtml]"    id="cv-embedhtml" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[embedlink]"    id="cv-embedlink" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[thumbnailurl]" id="cv-thumbnailurl" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[title]"        id="cv-title" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[autoplay]"     id="cv-autoplay" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[logging]"      id="cv-logging" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[onlineurl]"    id="cv-logging-onlineurl" type="text" style="display: none;" />' .
-                '<input name="' . $elname . '[eventname]"    id="cv-logging-eventname" type="text" style="display: none;" />';
-
-        return $str;
+                '</div></div>';
     }
 }

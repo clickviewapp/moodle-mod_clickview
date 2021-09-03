@@ -43,8 +43,6 @@ function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = 
     $data->timecreated = time();
     $data->timemodified = $data->timecreated;
 
-    $data = clickview_parse_clickview_selector_data($data);
-
     return $DB->insert_record('clickview', $data);
 }
 
@@ -64,8 +62,6 @@ function clickview_update_instance(stdClass $data, mod_clickview_mod_form $mform
 
     $data->timemodified = time();
     $data->id = $data->instance;
-
-    $data = clickview_parse_clickview_selector_data($data);
 
     return $DB->update_record('clickview', $data);
 }
@@ -131,20 +127,4 @@ function clickview_supports($feature) {
         default:
             return null;
     }
-}
-
-/**
- * Transform mform data to parse out the clickview video fields.
- *
- * @param stdClass $data The mform data.
- * @return stdClass
- */
-function clickview_parse_clickview_selector_data(stdClass $data): stdClass {
-    foreach ($data->clickview as $key => $value) {
-        $data->$key = $value;
-    }
-
-    unset($data->clickview);
-
-    return $data;
 }
