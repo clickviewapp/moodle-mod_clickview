@@ -22,7 +22,7 @@ define([], function() {
     return {
         init: function () {
             var displayTitle = document.getElementById('id_name'),
-                pluginFrame = document.getElementById('cv-plugin-frame'),
+                pluginFrame = document.getElementById('clickview_iframe'),
                 eventsApi = new CVEventsApi(pluginFrame.contentWindow),
                 userSetTitle = false;
 

@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_clickview\Utils;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
@@ -76,7 +78,8 @@ class mod_clickview_mod_form extends moodleform_mod {
         $mform->addElement('hidden', 'cv-logging-eventname');
         $mform->setType('cv-logging-eventname', PARAM_ALPHANUMEXT);
 
-        $mform->addElement('clickview_selector', 'clickview', get_string('choosevideo', 'clickview'));
+        $mform->addElement('header', 'clickview', get_string('choosevideo', 'clickview'));
+        $mform->addElement('html', Utils::get_iframe_html());
 
         $this->standard_grading_coursemodule_elements();
 
