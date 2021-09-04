@@ -47,17 +47,6 @@ $completiondetails = \core_completion\cm_completion_details::get_instance($cm, $
 $activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id);
 echo $OUTPUT->activity_information($cm, $completiondetails, $activitydates);
 
-$output = $video->embedhtml ?? '';
-
-if (empty($output)) {
-    $url = new moodle_url($video->embedlink);
-
-    $iframe =
-            '<iframe class="embed-responsive-item" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen src="' .
-            $url . '" width="' . $video->width . '" height="' . $video->height . '" allow="autoplay"></iframe>';
-    $output = html_writer::div($iframe, 'embed-responsive embed-responsive-16by9');
-}
-
-echo $OUTPUT->box($output);
+echo $OUTPUT->box($video->embedhtml);
 
 echo $OUTPUT->footer();
