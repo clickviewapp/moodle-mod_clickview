@@ -71,13 +71,6 @@ class mod_clickview_mod_form extends moodleform_mod {
         $mform->addElement('hidden', 'cv-thumbnailurl');
         $mform->setType('cv-thumbnailurl', PARAM_RAW);
 
-        $mform->addElement('hidden', 'cv-logging');
-        $mform->setType('cv-logging', PARAM_RAW);
-        $mform->addElement('hidden', 'cv-logging-onlineurl');
-        $mform->setType('cv-logging-onlineurl', PARAM_RAW);
-        $mform->addElement('hidden', 'cv-logging-eventname');
-        $mform->setType('cv-logging-eventname', PARAM_ALPHANUMEXT);
-
         $mform->addElement('header', 'clickview', get_string('choosevideo', 'clickview'));
         $mform->addElement('html', Utils::get_iframe_html('true'));
 

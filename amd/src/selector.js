@@ -47,12 +47,6 @@ define([], function() {
                     displayTitle.value = detail.title;
                 }
             }, true);
-
-            eventsApi.on('cv-delegate-logging', function (event, data) {
-                document.getElementsByName('cv-logging')[0].value = data.JSON;
-                document.getElementsByName('cv-logging-onlineurl')[0].value = data.onlineUrl;
-                document.getElementsByName('cv-logging-eventname')[0].value = data.eventName;
-            }, true);
         }
     };
 });
