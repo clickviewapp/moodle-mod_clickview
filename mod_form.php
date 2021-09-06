@@ -72,6 +72,7 @@ class mod_clickview_mod_form extends moodleform_mod {
         $mform->setType('cv-thumbnailurl', PARAM_RAW);
 
         $mform->addElement('header', 'clickview', get_string('choosevideo', 'clickview'));
+        $mform->setExpanded('clickview');
         $mform->addElement('html', Utils::get_iframe_html('true'));
 
         $this->standard_grading_coursemodule_elements();
