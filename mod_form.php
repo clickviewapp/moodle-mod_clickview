@@ -81,7 +81,7 @@ class mod_clickview_mod_form extends moodleform_mod {
 
         $this->add_action_buttons();
 
-        $PAGE->requires->js(new moodle_url(get_config('local_clickview', 'eventsapi')));
+        $PAGE->requires->js(Utils::get_eventsapi_url());
         $PAGE->requires->js_call_amd('mod_clickview/selector', 'init');
     }
 
