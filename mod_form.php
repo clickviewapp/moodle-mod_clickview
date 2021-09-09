@@ -28,6 +28,13 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
+/**
+ * The mod_clickview form class.
+ *
+ * @package     mod_clickview
+ * @copyright   2021 ClickView Pty. Limited <info@clickview.com.au>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_clickview_mod_form extends moodleform_mod {
 
     /**

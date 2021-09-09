@@ -67,8 +67,8 @@ class restore_clickview_activity_task extends restore_activity_task {
 
     /**
      * Defines the restore log rules that will be applied by the
-     * {@link restore_logs_processor} when restoring mod_h5pactivity logs. It
-     * must return one array of {@link restore_log_rule} objects.
+     * restore_logs_processor when restoring mod_clickview logs. It
+     * must return one array of objects.
      *
      * @return restore_log_rule[].
      */
@@ -84,8 +84,8 @@ class restore_clickview_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied by the
-     * {@link restore_logs_processor} when restoring course logs. It
-     * must return one array of {@link restore_log_rule} objects.
+     * restore_logs_processor when restoring course logs. It
+     * must return one array of objects.
      *
      * Note this rules are applied when restoring course logs by the
      * restore final task, but are defined here at activity level. All

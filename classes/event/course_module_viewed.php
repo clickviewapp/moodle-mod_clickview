@@ -44,6 +44,11 @@ class course_module_viewed extends \core\event\course_module_viewed {
         $this->data['objecttable'] = 'clickview';
     }
 
+    /**
+     * Used for mapping events on restore.
+     *
+     * @return string[]
+     */
     public static function get_objectid_mapping() {
         return ['db' => 'clickview', 'restore' => 'clickview'];
     }
