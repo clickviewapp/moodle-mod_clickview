@@ -20,21 +20,21 @@
  */
 define([], function() {
     return {
-        init: function () {
+        init: function() {
             var displayTitle = document.getElementById('id_name'),
                 pluginFrame = document.getElementById('clickview_iframe'),
                 eventsApi = new CVEventsApi(pluginFrame.contentWindow), // eslint-disable-line
                 userSetTitle = false;
 
             if (displayTitle) {
-                displayTitle.onkeyup = function (e) {
+                displayTitle.onkeyup = function(e) {
                     if (e.target.value) {
                         userSetTitle = true;
                     }
                 };
             }
 
-            eventsApi.on('cv-lms-addvideo', function (event, detail) {
+            eventsApi.on('cv-lms-addvideo', function(event, detail) {
                 document.getElementsByName('cv-name')[0].value = detail.title;
                 document.getElementsByName('cv-width')[0].value = detail.embed.width;
                 document.getElementsByName('cv-height')[0].value = detail.embed.height;
