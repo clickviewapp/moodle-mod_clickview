@@ -128,3 +128,24 @@ function clickview_supports($feature) {
             return null;
     }
 }
+
+/**
+ * Trigger the course_module_viewed event.
+ *
+ * @param stdClass $video ClickView video object
+ * @param stdClass $course course object
+ * @param stdClass $cm course module object
+ * @param stdClass $context context object
+ */
+function clickview_view($video, $course, $cm, $context) {
+    $params = [
+            'context' => $context,
+            'objectid' => $video->id
+    ];
+
+    $event = \mod_clickview\event\course_module_viewed::create($params);
+    $event->add_record_snapshot('course_modules', $cm);
+    $event->add_record_snapshot('course', $course);
+    $event->add_record_snapshot('clickview', $video);
+    $event->trigger();
+}

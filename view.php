@@ -23,14 +23,18 @@
  */
 
 require(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/mod/clickview/lib.php');
 
 $id = required_param('id', PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'clickview');
 
+$context = context_module::instance($cm->id);
 require_login($course, true, $cm);
 
 $video = $DB->get_record('clickview', ['id' => $cm->instance]);
+
+clickview_view($video, $course, $cm, $context);
 
 $PAGE->set_url('/mod/clickview/view.php', ['id' => $cm->id]);
 
