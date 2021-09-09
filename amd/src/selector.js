@@ -23,7 +23,7 @@ define([], function() {
         init: function () {
             var displayTitle = document.getElementById('id_name'),
                 pluginFrame = document.getElementById('clickview_iframe'),
-                eventsApi = new CVEventsApi(pluginFrame.contentWindow),
+                eventsApi = new CVEventsApi(pluginFrame.contentWindow), // eslint-disable-line
                 userSetTitle = false;
 
             if (displayTitle) {
