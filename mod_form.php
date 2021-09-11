@@ -133,7 +133,14 @@ class mod_clickview_mod_form extends moodleform_mod {
 
             if ($expkey[0] === 'cv') {
                 $newkey = (string)$expkey[1];
-                $data->$newkey = $value;
+
+                if ($newkey === 'name') {
+                    $data->title = $value;
+                }
+
+                if (!empty($value) && $value !== $data->title) {
+                    $data->$newkey = $value;
+                }
 
                 unset($data->$key);
             }
