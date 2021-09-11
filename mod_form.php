@@ -165,9 +165,9 @@ class mod_clickview_mod_form extends moodleform_mod {
         $content = html_writer::tag('h5', 'Selected video is:');
 
         if ($activity = $DB->get_record('clickview', ['id' => $id])) {
-            $content .= html_writer::img($activity->thumbnailurl, $activity->name, ['class' => 'img-responsive img-thumbnail']);
+            $content .= html_writer::img($activity->thumbnailurl, $activity->title, ['class' => 'img-responsive img-thumbnail']);
             $content .= html_writer::empty_tag('br');
-            $content .= html_writer::span($activity->name);
+            $content .= html_writer::span($activity->title);
         } else {
             $content .= html_writer::span('No video');
         }
