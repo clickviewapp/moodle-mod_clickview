@@ -34,7 +34,7 @@ class restore_clickview_activity_task extends restore_activity_task {
     /**
      * Defines particular settings that this activity can have.
      */
-    protected function define_my_settings(): void {
+    protected function define_my_settings() {
         return;
     }
 
@@ -43,7 +43,7 @@ class restore_clickview_activity_task extends restore_activity_task {
      *
      * @throws base_task_exception
      */
-    protected function define_my_steps(): void {
+    protected function define_my_steps() {
         $this->add_step(new restore_clickview_activity_structure_step('clickview_structure', 'clickview.xml'));
     }
 

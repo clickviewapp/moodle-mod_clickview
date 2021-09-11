@@ -50,7 +50,7 @@ class restore_clickview_activity_structure_step extends restore_activity_structu
      * @throws base_step_exception
      * @throws dml_exception
      */
-    protected function process_clickview(array $data): void {
+    protected function process_clickview(array $data) {
         global $DB;
 
         $data = (object)$data;
