@@ -155,11 +155,11 @@ class mod_clickview_mod_form extends moodleform_mod {
     /**
      * Returns the ClickView thumbnail HTML code with heading.
      *
+     * @param string $id the activity instance id.
      * @return string
      * @throws dml_exception
-     * @throws moodle_exception
      */
-    protected function get_thumbnail_html($id) {
+    protected function get_thumbnail_html(string $id): string {
         global $DB;
 
         $content = html_writer::tag('h5', 'Selected video is:');
