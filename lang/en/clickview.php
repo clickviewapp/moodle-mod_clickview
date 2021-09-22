@@ -40,3 +40,5 @@ $string['pluginadministration'] = 'ClickView administration';
 $string['choosevideo'] = 'Choose a video';
 $string['clickview:addinstance'] = 'Add a new ClickView Video';
 $string['privacy:metadata'] = 'The ClickView plugin does not store any personal data.';
+$string['selectedvideo_intro'] = 'Selected video is:';
+$string['selectedvideo_default'] = 'No video';
