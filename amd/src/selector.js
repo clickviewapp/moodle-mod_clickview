@@ -46,6 +46,14 @@ define([], function() {
                 if (displayTitle && !userSetTitle) {
                     displayTitle.value = detail.title;
                 }
+
+                var selectedvideo = '<img class="img-responsive img-thumbnail" ' +
+                    'src="' + detail.thumbnailUrl + '"' +
+                    'alt="' + detail.title + '"><br>' +
+                    '<span>' + detail.title + '</span>';
+
+                var container = document.getElementById('cv_selectedvideo');
+                container.innerHTML = selectedvideo;
             }, true);
         }
     };
