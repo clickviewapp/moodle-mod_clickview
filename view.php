@@ -47,10 +47,6 @@ $PAGE->set_heading(format_string($course->fullname));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($video->name));
 
-$completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
-$activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id);
-echo $OUTPUT->activity_information($cm, $completiondetails, $activitydates);
-
 echo $OUTPUT->box($video->embedhtml);
 
 echo $OUTPUT->footer();
