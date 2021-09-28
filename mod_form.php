@@ -80,6 +80,7 @@ class mod_clickview_mod_form extends moodleform_mod {
 
         $mform->addElement('header', 'clickview', get_string('choosevideo', 'clickview'));
         $mform->setExpanded('clickview');
+        $mform->addElement('html', $this->get_thumbnail_html($this->current->id));
         $mform->addElement('html', Utils::get_iframe_html('true'));
 
         $this->standard_grading_coursemodule_elements();
@@ -149,5 +150,28 @@ class mod_clickview_mod_form extends moodleform_mod {
         unset($data->clickview);
 
         return $data;
+    }
+
+    /**
+     * Returns the ClickView thumbnail HTML code with heading.
+     *
+     * @param string $id the activity instance id.
+     * @return string
+     * @throws dml_exception|coding_exception
+     */
+    protected function get_thumbnail_html(string $id): string {
+        global $DB;
+
+        $title = html_writer::tag('h5', get_string('selectedvideo_intro', 'clickview'));
+
+        if ($activity = $DB->get_record('clickview', ['id' => $id])) {
+            $content = html_writer::img($activity->thumbnailurl, $activity->title, ['class' => 'img-responsive img-thumbnail']);
+            $content .= html_writer::empty_tag('br');
+            $content .= html_writer::span($activity->title);
+        } else {
+            $content = html_writer::span(get_string('selectedvideo_default', 'clickview'));
+        }
+
+        return $title . html_writer::div($content, 'd-block mb-3', ['id' => 'cv_selectedvideo']);
     }
 }
