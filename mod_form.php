@@ -77,7 +77,8 @@ class mod_clickview_mod_form extends moodleform_mod {
 
         $mform->addElement('header', 'clickview', get_string('choosevideo', 'clickview'));
         $mform->setExpanded('clickview');
-        $mform->addElement('html', $this->get_thumbnail_html((int) $this->current->id));
+        $mform->addElement('static', 'cv-video-selected', get_string('selectedvideo_intro', 'clickview'),
+                $this->get_thumbnail_html((int) $this->current->id));
         $mform->addElement('html', Utils::get_iframe_html('true'));
 
         $this->standard_grading_coursemodule_elements();
@@ -101,18 +102,19 @@ class mod_clickview_mod_form extends moodleform_mod {
      * @return array
      *
      * @throws coding_exception
+     * @throws dml_exception
      */
     public function validation($data, $files): array {
+        global $DB;
+
         $errors = parent::validation($data, $files);
 
-        foreach ($data as $key => $value) {
-            $expkey = explode('-', $key);
+        if ($DB->record_exists('clickview', ['id' => $data['instance']]) && empty($data['cv-name'])) {
+            return $errors;
+        }
 
-            if ($expkey[0] === 'cv') {
-                if (!isset($value)) {
-                    $errors['clickview'] = get_string('required');
-                }
-            }
+        if (empty($data['cv-name'])) {
+            $errors['cv-video-selected'] = get_string('error_selectvideo', 'mod_clickview');
         }
 
         return $errors;
@@ -162,12 +164,10 @@ class mod_clickview_mod_form extends moodleform_mod {
     protected function get_thumbnail_html(int $id): string {
         global $DB;
 
-        $title = html_writer::tag('h5', get_string('selectedvideo_intro', 'clickview'));
-
         if (!$DB->record_exists('clickview', ['id' => $id])) {
             $content = html_writer::span(get_string('selectedvideo_default', 'clickview'));
 
-            return $title . html_writer::div($content, 'd-block mb-3', ['id' => 'cv_selectedvideo']);
+            return html_writer::div($content, 'd-block pt-2', ['id' => 'cv_selectedvideo']);
         }
 
         $activity = $DB->get_record('clickview', ['id' => $id], 'title, thumbnailurl');
@@ -176,6 +176,6 @@ class mod_clickview_mod_form extends moodleform_mod {
         $content .= html_writer::empty_tag('br');
         $content .= html_writer::span($activity->title);
 
-        return $title . html_writer::div($content, 'd-block mb-3', ['id' => 'cv_selectedvideo']);
+        return html_writer::div($content, 'd-block mb-3', ['id' => 'cv_selectedvideo']);
     }
 }
