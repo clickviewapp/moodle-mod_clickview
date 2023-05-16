@@ -24,8 +24,6 @@
 
 namespace mod_clickview\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_clickview course module viewed event class.
  *
