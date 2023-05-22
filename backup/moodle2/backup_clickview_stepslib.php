@@ -23,8 +23,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Define the complete structure for backup, with file and id annotations.
  */
@@ -39,14 +37,14 @@ class backup_clickview_activity_structure_step extends backup_activity_structure
     protected function define_structure(): backup_nested_element {
         // Define each element separated.
         $columns = [
-                'course',
                 'name',
                 'width',
                 'height',
                 'autoplay',
                 'embedhtml',
                 'embedlink',
-                'thumbnailurl'
+                'thumbnailurl',
+                'title'
         ];
 
         $clickview = new backup_nested_element('clickview', ['id'], $columns);
