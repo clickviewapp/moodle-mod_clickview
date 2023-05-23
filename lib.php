@@ -58,6 +58,13 @@ function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = 
 function clickview_update_instance(stdClass $data, mod_clickview_mod_form $mform = null): bool {
     global $DB;
 
+    // We allow to update the instance, without changing the selected video.
+    if (empty($data->title)) {
+        $record = $DB->get_record('clickview', ['id' => $data->instance, 'course' => $data->course], 'title');
+
+        $data->title = $record->title;
+    }
+
     $data->timemodified = time();
     $data->id = $data->instance;
 
