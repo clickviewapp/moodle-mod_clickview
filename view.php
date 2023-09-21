@@ -45,7 +45,6 @@ $PAGE->set_title(format_string($pagetitle));
 $PAGE->set_heading(format_string($course->fullname));
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($video->name));
 
 echo $OUTPUT->box($video->embedhtml);
 
