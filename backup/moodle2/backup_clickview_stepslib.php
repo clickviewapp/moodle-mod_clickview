@@ -44,7 +44,7 @@ class backup_clickview_activity_structure_step extends backup_activity_structure
                 'embedhtml',
                 'embedlink',
                 'thumbnailurl',
-                'title'
+                'title',
         ];
 
         $clickview = new backup_nested_element('clickview', ['id'], $columns);
