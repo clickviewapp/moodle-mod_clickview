@@ -145,7 +145,7 @@ function clickview_supports($feature) {
 function clickview_view($video, $course, $cm, $context) {
     $params = [
             'context' => $context,
-            'objectid' => $video->id
+            'objectid' => $video->id,
     ];
 
     $event = \mod_clickview\event\course_module_viewed::create($params);
