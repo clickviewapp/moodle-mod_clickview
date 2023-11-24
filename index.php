@@ -100,7 +100,7 @@ foreach ($videos as $video) {
                     new moodle_url('/mod/clickview/view.php', ['id' => $cm->id]),
                     format_string($video->name),
                     ['class' => $class],
-            )
+            ),
     ];
 }
 
