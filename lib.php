@@ -120,7 +120,7 @@ function clickview_supports($feature) {
         case FEATURE_SHOW_DESCRIPTION:
             return false;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
-            return true;
+            return false;
         case FEATURE_MODEDIT_DEFAULT_COMPLETION:
             return true;
         case FEATURE_GRADE_HAS_GRADE:
