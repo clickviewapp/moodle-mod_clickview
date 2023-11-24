@@ -31,5 +31,5 @@ $plugin->supported = [311, 402];
 $plugin->release = 'v3.11-r7 - v4.2-r4';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-        'local_clickview' => 2021083002
+        'local_clickview' => 2021083002,
 ];

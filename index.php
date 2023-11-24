@@ -65,11 +65,11 @@ $table->attributes['class'] = 'generaltable mod_index';
 
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_' . $course->format);
-    $table->head = array($strsectionname, $strname);
-    $table->align = array('center', 'left');
+    $table->head = [$strsectionname, $strname];
+    $table->align = ['center', 'left'];
 } else {
-    $table->head = array($strlastmodified, $strname);
-    $table->align = array('left', 'left');
+    $table->head = [$strlastmodified, $strname];
+    $table->align = ['left', 'left'];
 }
 
 $currentsection = '';
@@ -99,7 +99,7 @@ foreach ($videos as $video) {
             html_writer::link(
                     new moodle_url('/mod/clickview/view.php', ['id' => $cm->id]),
                     format_string($video->name),
-                    ['class' => $class]
+                    ['class' => $class],
             )
     ];
 }
