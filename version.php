@@ -24,12 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2023112402;
+$plugin->version = 2023112403;
 $plugin->requires = 2021051700;
 $plugin->component = 'mod_clickview';
 $plugin->supported = [311, 405];
-$plugin->release = 'v3.11-r9 - v4.5-r1';
+$plugin->release = 'v3.11-r10 - v4.5-r2';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-        'local_clickview' => 2021083003,
+        'local_clickview' => 2021083005,
 ];
