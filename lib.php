@@ -35,7 +35,7 @@
  * @throws dml_exception
  * @throws moodle_exception
  */
-function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = null): int {
+function clickview_add_instance(stdClass $data, ?mod_clickview_mod_form $mform = null): int {
     global $DB;
 
     $data->timecreated = time();
@@ -55,7 +55,7 @@ function clickview_add_instance(stdClass $data, mod_clickview_mod_form $mform = 
  * @return bool True if successful, false otherwise.
  * @throws dml_exception
  */
-function clickview_update_instance(stdClass $data, mod_clickview_mod_form $mform = null): bool {
+function clickview_update_instance(stdClass $data, ?mod_clickview_mod_form $mform = null): bool {
     global $DB;
 
     // We allow to update the instance, without changing the selected video.

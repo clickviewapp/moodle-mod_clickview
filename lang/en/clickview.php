@@ -23,7 +23,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'ClickView Video';
+$string['choosevideo'] = 'Choose a video';
+$string['clickview:addinstance'] = 'Add a new ClickView Video';
+$string['error_selectvideo'] = 'You must select a video.';
 $string['modulename'] = 'ClickView Video';
 $string['modulename_help'] = 'The ClickView activity allows you to search for and embed any ClickView video into your course page.
 
@@ -37,9 +39,7 @@ A ClickView activity may be used
 $string['modulename_link'] = 'mod/clickview/view';
 $string['modulenameplural'] = 'ClickView Videos';
 $string['pluginadministration'] = 'ClickView administration';
-$string['choosevideo'] = 'Choose a video';
-$string['clickview:addinstance'] = 'Add a new ClickView Video';
+$string['pluginname'] = 'ClickView Video';
 $string['privacy:metadata'] = 'The ClickView plugin does not store any personal data.';
-$string['selectedvideo_intro'] = 'Selected video';
 $string['selectedvideo_default'] = 'No video selected.';
-$string['error_selectvideo'] = 'You must select a video.';
+$string['selectedvideo_intro'] = 'Selected video';
